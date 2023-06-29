@@ -11,7 +11,7 @@ splittedFiles=()
 
 function split_csv {
     local origin_file_name=$1
-    rm -fr data/process/${PROCESS_UUID} && mkdir data/process/${PROCESS_UUID}
+    rm -fr data/process/${PROCESS_UUID} && mkdir -p data/process/${PROCESS_UUID}
     # 这样是把test.csv文件按10行拆分文件，-d是增加数字后缀，-a是指定数字后缀的长度，这里设置成4位，不满4位前面补0，--additional-suffix是增加后缀，data_是文件前缀；
     # split -l 10 test.csv -d -a 4 --additional-suffix=.csv data_
     split -l ${splitByRow} ${origin_file_name} -d -a ${fileNameSuffixPadding} --additional-suffix=.csv data/process/${PROCESS_UUID}/data_
@@ -27,7 +27,7 @@ function split_csv {
 # csv 2 xlsx
 #csv2xlsx -i test.csv -o test.xlsx
 function csv_convert_xlsx {
-    rm -fr data/convert/${PROCESS_UUID} && mkdir data/convert/${PROCESS_UUID}
+    rm -fr data/convert/${PROCESS_UUID} && mkdir -p data/convert/${PROCESS_UUID}
     for file in "${splittedFiles[@]}"; do
         #echo "$file"
         local filePrefixName=${file%.*}
@@ -44,7 +44,7 @@ function csv_convert_xlsx {
 #java -jar ./watermarker-cmd-1.0.jar --watermark=中文测试 --inputFileFullPath=/lyndon/iProject/shellpath/csv-xlsx-watermarker/data/receive/test.xlsx --outputFileFullPath=/lyndon/iProject/shellpath/csv-xlsx-watermarker/data/done/test-watered.xlsx
 function watermark_xlsx {
     local wmark=$1
-    rm -fr data/done/${PROCESS_UUID} && mkdir data/done/${PROCESS_UUID}
+    rm -fr data/done/${PROCESS_UUID} && mkdir -p data/done/${PROCESS_UUID}
     java -jar ./watermarker-cmd-1.1.jar --watermark=${wmark} --inputPath=data/convert/${PROCESS_UUID} --outputPath=data/done/${PROCESS_UUID}
     rm -fr data/convert/${PROCESS_UUID}
 }
