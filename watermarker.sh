@@ -8,7 +8,6 @@ fileNameSuffixPadding=${FILE_NAME_SUFFIX_PADDING:-4}
 PROCESS_UUID=$(uuidgen |sed 's/-//g')
 
 splittedFiles=()
-convertXlsxs=()
 
 function split_csv {
     local origin_file_name=$1
@@ -21,8 +20,7 @@ function split_csv {
     while IFS=  read -r -d $'\0'; do
         splittedFiles+=("$REPLY")
     done < <(find data/process/${PROCESS_UUID} -type f -print0)
-
-    # csv_convert_xlsx
+    # rm -f $1
 }
 
 
