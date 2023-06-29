@@ -8,7 +8,6 @@ fileNameSuffixPadding=${FILE_NAME_SUFFIX_PADDING:-4}
 PROCESS_UUID=$(uuidgen |sed 's/-//g')
 
 splittedFiles=()
-convertXlsxs=()
 
 function split_csv {
     local origin_file_name=$1
@@ -21,8 +20,6 @@ function split_csv {
     while IFS=  read -r -d $'\0'; do
         splittedFiles+=("$REPLY")
     done < <(find data/process/${PROCESS_UUID} -type f -print0)
-
-    # csv_convert_xlsx
 }
 
 
@@ -38,7 +35,6 @@ function csv_convert_xlsx {
         echo "扩展名：${i#*.}"
         echo "csv2xlsx -i $file -o data/convert/${PROCESS_UUID}/${targetFileName}.xlsx"
         csv2xlsx -i $file -o data/convert/${PROCESS_UUID}/${targetFileName}.xlsx
-        convertXlsxs+=(${filePrefixName}.xlsx)
     done
     rm -fr data/process/${PROCESS_UUID}
 }
@@ -48,15 +44,6 @@ function csv_convert_xlsx {
 function watermark_xlsx {
     local wmark=$1
     rm -fr data/done/${PROCESS_UUID} && mkdir data/done/${PROCESS_UUID}
-    #echo "wmark:${wmark}"
-    # for xfile in "${convertXlsxs[@]}"; do
-    #     #echo "xfile: ${xfile}"
-    #     local xFilePrefixName=${xfile}
-    #     local targetFileName=${xFilePrefixName##*/}
-    #     #echo "targetFileName: ${targetFileName}"
-    #     #echo "java -jar ./watermarker-cmd-1.0.jar --watermark=${wmark} --inputFileFullPath=${xfile} --outputFileFullPath=data/done/${PROCESS_UUID}/${targetFileName}"
-    #     java -jar ./watermarker-cmd-1.0.jar --watermark=${wmark} --inputFileFullPath=${xfile} --outputFileFullPath=data/done/${PROCESS_UUID}/${targetFileName}
-    # done
     java -jar ./watermarker-cmd-1.1.jar --watermark=${wmark} --inputPath=data/convert/${PROCESS_UUID} --outputPath=data/done/${PROCESS_UUID}
     rm -fr data/convert/${PROCESS_UUID}
 }
