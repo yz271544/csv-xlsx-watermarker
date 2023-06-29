@@ -27,6 +27,23 @@ apt install coreutils
 pacman -S coreutils
 ```
 
+**uuidgen**
+- centos
+```shell
+yum install util-linux
+```
+
+- ubuntu
+```shell
+apt install util-linux
+```
+
+- Arch linux
+```shell
+pacman -S util-linux
+```
+
+
 **watermark-cmd-{version}.jar**
 - you can use deirect
 - or go to the repository `watermarker-cmd` to build
