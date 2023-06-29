@@ -20,6 +20,7 @@ function split_csv {
     while IFS=  read -r -d $'\0'; do
         splittedFiles+=("$REPLY")
     done < <(find data/process/${PROCESS_UUID} -type f -print0)
+    # rm -f $1
 }
 
 
