@@ -27,15 +27,17 @@ function split_csv {
 # csv 2 xlsx
 #csv2xlsx -i test.csv -o test.xlsx
 function csv_convert_xlsx {
+    rm -fr data/convert/${PROCESS_UUID} && mkdir data/convert/${PROCESS_UUID}
     for file in "${splittedFiles[@]}"; do
         #echo "$file"
         local filePrefixName=${file%.*}
-        #echo "文件名: ${filePrefixName}"
-        #echo "扩展名：${i#*.}"
-        #echo "csv2xlsx -i $file -o ${filePrefixName}.xlsx"
-        csv2xlsx -i $file -o ${filePrefixName}.xlsx
-        convertXlsxs+=(${filePrefixName}.xlsx)
+        local targetFileName=${filePrefixName##*/}
+        echo "文件名: ${filePrefixName}"
+        echo "扩展名：${i#*.}"
+        echo "csv2xlsx -i $file -o data/convert/${PROCESS_UUID}/${targetFileName}.xlsx"
+        csv2xlsx -i $file -o data/convert/${PROCESS_UUID}/${targetFileName}.xlsx
     done
+    rm -fr data/process/${PROCESS_UUID}
 }
 
 # watermarker
@@ -43,16 +45,8 @@ function csv_convert_xlsx {
 function watermark_xlsx {
     local wmark=$1
     rm -fr data/done/${PROCESS_UUID} && mkdir data/done/${PROCESS_UUID}
-    #echo "wmark:${wmark}"
-    for xfile in "${convertXlsxs[@]}"; do
-        #echo "xfile: ${xfile}"
-        local xFilePrefixName=${xfile}
-        local targetFileName=${xFilePrefixName##*/}
-        #echo "targetFileName: ${targetFileName}"
-        #echo "java -jar ./watermarker-cmd-1.0.jar --watermark=${wmark} --inputFileFullPath=${xfile} --outputFileFullPath=data/done/${PROCESS_UUID}/${targetFileName}"
-        java -jar ./watermarker-cmd-1.0.jar --watermark=${wmark} --inputFileFullPath=${xfile} --outputFileFullPath=data/done/${PROCESS_UUID}/${targetFileName}
-    done
-    rm -fr data/process/${PROCESS_UUID}
+    java -jar ./watermarker-cmd-1.1.jar --watermark=${wmark} --inputPath=data/convert/${PROCESS_UUID} --outputPath=data/done/${PROCESS_UUID}
+    rm -fr data/convert/${PROCESS_UUID}
 }
 
 # tar.gz
@@ -65,8 +59,8 @@ function tar_and_gz {
 
 # mv to backup
 function to_backup {
-    rm -f data/backup/${PROCESS_UUID}.tar.gz
-    mv data/done/${PROCESS_UUID}.tar.gz data/backup/
+    rm -f backup/${PROCESS_UUID}.tar.gz
+    mv data/done/${PROCESS_UUID}.tar.gz backup/
 }
 
 
