@@ -1,5 +1,8 @@
 logs/
 backup/*.gz
 data/convert/*
+!data/convert/.empty
 data/done/*
+!data/done/.empty
 data/process/*
+!data/process/.empty
