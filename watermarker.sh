@@ -6,6 +6,8 @@ set -o errexit
 splitByRow=${SPLIT_BY_ROW:-10}
 fileNameSuffixPadding=${FILE_NAME_SUFFIX_PADDING:-4}
 PROCESS_UUID=$(uuidgen |sed 's/-//g')
+CONCURRENT_NUM=${CONCURRENT_NUM:-2}
+DARK_TYPE=${DARK_TYPE:-solid}
 
 splittedFiles=()
 
@@ -45,7 +47,8 @@ function csv_convert_xlsx {
 function watermark_xlsx {
     local wmark=$1
     rm -fr data/done/${PROCESS_UUID} && mkdir -p data/done/${PROCESS_UUID}
-    java -jar ./watermarker-cmd-1.1.jar --watermark=${wmark} --inputPath=data/convert/${PROCESS_UUID} --outputPath=data/done/${PROCESS_UUID}
+    echo "java -jar ./watermarker-cmd-1.2.jar --pool.size=${CONCURRENT_NUM} --darkType=${DARK_TYPE} --watermark=${wmark} --inputPath=data/convert/${PROCESS_UUID} --outputPath=data/done/${PROCESS_UUID}"
+    java -jar ./watermarker-cmd-1.2.jar --pool.size=${CONCURRENT_NUM} --darkType=${DARK_TYPE} --watermark=${wmark} --inputPath=data/convert/${PROCESS_UUID} --outputPath=data/done/${PROCESS_UUID}
     rm -fr data/convert/${PROCESS_UUID}
 }
 
