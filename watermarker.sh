@@ -36,8 +36,8 @@ function csv_convert_xlsx {
         local targetFileName=${filePrefixName##*/}
         echo "文件名: ${filePrefixName}"
         echo "扩展名：${i#*.}"
-        echo "csv2xlsx -i $file -o data/convert/${PROCESS_UUID}/${targetFileName}.xlsx"
-        csv2xlsx -i $file -o data/convert/${PROCESS_UUID}/${targetFileName}.xlsx
+        echo "csv2xlsx -i $file -o data/convert/${PROCESS_UUID}/${targetFileName}.xlsx -w"
+        csv2xlsx -i $file -o data/convert/${PROCESS_UUID}/${targetFileName}.xlsx -w
     done
     rm -fr data/process/${PROCESS_UUID}
 }
@@ -47,8 +47,8 @@ function csv_convert_xlsx {
 function watermark_xlsx {
     local wmark=$1
     rm -fr data/done/${PROCESS_UUID} && mkdir -p data/done/${PROCESS_UUID}
-    echo "java -jar ./watermarker-cmd-1.2.jar --pool.size=${CONCURRENT_NUM} --darkType=${DARK_TYPE} --watermark=${wmark} --inputPath=data/convert/${PROCESS_UUID} --outputPath=data/done/${PROCESS_UUID}"
-    java -jar ./watermarker-cmd-1.2.jar --pool.size=${CONCURRENT_NUM} --darkType=${DARK_TYPE} --watermark=${wmark} --inputPath=data/convert/${PROCESS_UUID} --outputPath=data/done/${PROCESS_UUID}
+    echo "java -jar ./watermarker-cmd-1.3.jar --skipLoadLib --pool.size=${CONCURRENT_NUM} --darkType=${DARK_TYPE} --watermark=${wmark} --inputPath=data/convert/${PROCESS_UUID} --outputPath=data/done/${PROCESS_UUID}"
+    java -jar ./watermarker-cmd-1.3.jar --skipLoadLib --pool.size=${CONCURRENT_NUM} --darkType=${DARK_TYPE} --watermark=${wmark} --inputPath=data/convert/${PROCESS_UUID} --outputPath=data/done/${PROCESS_UUID}
     rm -fr data/convert/${PROCESS_UUID}
 }
 

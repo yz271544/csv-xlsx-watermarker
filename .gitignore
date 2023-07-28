@@ -6,3 +6,4 @@ data/done/*
 !data/done/.empty
 data/process/*
 !data/process/.empty
+*.jar
