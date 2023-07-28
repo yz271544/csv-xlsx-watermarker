@@ -47,8 +47,8 @@ function csv_convert_xlsx {
 function watermark_xlsx {
     local wmark=$1
     rm -fr data/done/${PROCESS_UUID} && mkdir -p data/done/${PROCESS_UUID}
-    echo "java -jar ./watermarker-cmd-1.3.jar --skipLoadLib --pool.size=${CONCURRENT_NUM} --darkType=${DARK_TYPE} --watermark=${wmark} --inputPath=data/convert/${PROCESS_UUID} --outputPath=data/done/${PROCESS_UUID}"
-    java -jar ./watermarker-cmd-1.3.jar --skipLoadLib --pool.size=${CONCURRENT_NUM} --darkType=${DARK_TYPE} --watermark=${wmark} --inputPath=data/convert/${PROCESS_UUID} --outputPath=data/done/${PROCESS_UUID}
+    #echo "java -jar ./watermarker-cmd-1.3.jar --skipLoadLib --pool.size=${CONCURRENT_NUM} --darkType=${DARK_TYPE} --watermark=${wmark} --inputPath=data/convert/${PROCESS_UUID} --outputPath=data/done/${PROCESS_UUID} [{\\"fontFamily\\":\\"宋体\\",\\"fontSize\\":\\"60\\",\\"fontStyle\\":\\"plain\\",\\"fR\\":\\"197\\",\\"fG\\":\\"212\\",\\"fB\\":\\"237\\"}]
+    java -jar ./watermarker-cmd-1.3.jar --skipLoadLib --pool.size=${CONCURRENT_NUM} --darkType=${DARK_TYPE} --watermark=${wmark} --inputPath=data/convert/${PROCESS_UUID} --outputPath=data/done/${PROCESS_UUID} "[{\"fontFamily\":\"宋体\",\"fontSize\":\"60\",\"fontStyle\":\"plain\",\"fR\":\"197\",\"fG\":\"212\",\"fB\":\"237\"}]"
     rm -fr data/convert/${PROCESS_UUID}
 }
 
